@@ -1,0 +1,20 @@
+<?php
+
+include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
+
+$default_lang = Configuration::get('PS_LANG_DEFAULT');
+$product = new Product();
+$product->name = [$default_lang => 'My new product'];
+$product->link_rewrite = [$default_lang => 'my_product'];
+$product->quantity = 100;
+$product->price = 9.99;
+$product-> id_category = [3,4];
+$product-> id_category_default = 3;
+
+if($product->add())
+{
+    $product->updateCategories($product->id_category);
+    StockAvailable::setQuanity((int)$product->id, 0, $product->quantity,Context::getContext()->shop->id)
+}
+
